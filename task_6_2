@@ -1,0 +1,20 @@
+"""Найти IP адрес спамера
+и количество отправленных им запросов по данным файла логов"""
+
+file_log = 'nginx_logs.txt'
+user = dict()
+mx = 0
+spamer = ''
+with open(file_log, 'r', encoding='utf-8') as fl:
+    for row in fl:
+        addr = str(row[:row.find('-')])  # просматриваю адреса
+        # print(addr)
+        if addr in user:  # новые дописываю, существующие подсчитываю
+            user[addr][0] += 1
+        else:
+            user[addr] = [1]
+        # сопоставляю кол-во повторений и отслеживаю максимальное
+        spamer = addr if mx < user[addr][0] else spamer
+        mx = user[addr][0] if mx < user[addr][0] else mx
+
+print('spamer is ', spamer)

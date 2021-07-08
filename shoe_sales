@@ -1,0 +1,34 @@
+"""Реализовать простую систему хранения данных о суммах продаж булочной.
+Скрипт для вывода на экран записанных данных.
+Для чтения данных реализовать в командной строке следующую логику:
+    запуск без параметров — выводить все записи;
+    запуск с одним параметром-числом — выводить записи с номера, равного этому числу, до конца;
+    запуск с двумя числами — выводить с номера, равного первому числу, по номер, равный второму числу, включительно.
+"""
+
+import sys
+
+if len(sys.argv) == 1:
+    with open('sales.txt', 'r', encoding='utf-8') as f:
+        print(f.read())
+elif len(sys.argv) == 2:
+    par1 = int(sys.argv[1])
+    with open('sales.txt', 'r', encoding='utf-8') as f:
+        cnt = 1
+        while cnt < par1:
+            # передвигаю курсор на заданное число строк
+            f.readline()
+            cnt += 1
+        print(f.read())
+else:
+    par1 = int(sys.argv[1])
+    par2 = int(sys.argv[2])
+    with open('sales.txt', 'r', encoding='utf-8') as f:
+        cnt = 1
+        while cnt < par1:
+            f.readline()
+            cnt += 1
+        pos1 = f.tell()
+        while cnt <= par2:
+            print(f.readline().strip('\n'), sep='')
+            cnt += 1

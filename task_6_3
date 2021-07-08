@@ -1,0 +1,37 @@
+"""Есть два файла: в одном ФИО пользователей сайта,а в другом их хобби.
+Одна строка — один пользователь, разделитель — запятая.
+Написать код, загружающий данные из обоих и формирующий словарь:
+ключи — ФИО, значения — данные о хобби.
+Сохранить словарь в файл. Проверить сохранённые данные.
+Если в файле хобби, меньше записей, чем в ФИО, задаём в словаре значение None.
+Если наоборот — выходим из скрипта с кодом «1».
+Объём данных в файлах меньше объема ОЗУ."""
+
+import sys
+
+
+def replacer(items):
+    return ((el.replace(';', ' ') for el in itm) for itm in items)
+
+
+result = dict()
+file_fio = 'fio.csv'
+file_hobby = 'hobby.csv'
+# кодировку .csv-файла пришлось угадывать
+with open(file_fio, 'r', encoding='ANSI') as fio, open(file_hobby, 'r', encoding='ANSI') as fh:
+    # определяю кол-во фамилий и кол-во хобби
+    fio_l = [ln.replace(';', ' ').strip('\n') for ln in fio.readlines()]
+    hb_l = [ln.replace(';', ', ').strip('\n').strip().strip(',') for ln in fh.readlines()]
+    fio_num = len(fio_l)
+    hobby_num = len(hb_l)
+    if hobby_num > fio_num:
+        sys.exit(1)  # если фамилий мало, выход с кодом 1
+    elif hobby_num < fio_num:
+        # если фамилий и хобби неодинаково, дополняем хоби None'ами
+        hb_l.extend([None] * (fio_num - hobby_num))
+
+    # result = dict.fromkeys(fio.readlines(), fh.readlines())
+    # fromkeys все хобби присвоил каждому ключу, потому не подошел
+    result = {nm: hb for nm, hb in zip(fio_l, hb_l)}
+
+print(result, sep='\n')
